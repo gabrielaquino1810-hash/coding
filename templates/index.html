@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Filtro de Posições por Fundo (Pesquisa)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        h1 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; }
+        
+        /* Estilo para o campo de texto */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        .error-message { color: red; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Filtro de Posições - Fundos</h1>
+        <p>Digite o nome do fundo para pesquisa e selecione-o na lista de sugestões.</p>
+
+        <form id="filtro-form" method="POST" action="/">
+            <label for="fundo_input">Pesquisar e Escolher Fundo ({{ fundos|length }} disponíveis):</label>
+            
+            <input 
+                type="text" 
+                id="fundo_input" 
+                name="fundo_selecionado" 
+                list="fundos-list" 
+                placeholder="Comece a digitar o nome do fundo..."
+                required
+            >
+            
+            <datalist id="fundos-list">
+                {% for fundo in fundos %}
+                    <option value="{{ fundo }}"></option>
+                {% endfor %}
+            </datalist>
+            
+            <button type="submit" id="submit-btn">Visualizar Posições</button>
+            <p id="validation-error" class="error-message" style="display: none;">🚨 Por favor, selecione um fundo válido da lista.</p>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript para garantir que o valor submetido é um dos valores da lista
+        document.getElementById('filtro-form').addEventListener('submit', function(event) {
+            const input = document.getElementById('fundo_input');
+            const valor = input.value.trim();
+            const datalist = document.getElementById('fundos-list');
+            const erro = document.getElementById('validation-error');
+            let is_valid = false;
+
+            // Itera sobre as opções no datalist para verificar se o valor digitado corresponde a um fundo
+            for (const option of datalist.options) {
+                if (option.value === valor) {
+                    is_valid = true;
+                    break;
+                }
+            }
+
+            if (!is_valid) {
+                event.preventDefault(); // Impede o envio do formulário
+                erro.style.display = 'block'; // Mostra a mensagem de erro
+                input.focus();
+            } else {
+                erro.style.display = 'none'; // Esconde a mensagem de erro
+            }
+        });
+    </script>
+</body>
+</html>
