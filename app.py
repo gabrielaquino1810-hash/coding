@@ -8,8 +8,11 @@ import json # Necessário para passar os dados do gráfico
 # ----------------------------------------------------
 # CONFIGURAÇÃO DE PASTAS E PREFIXOS
 # ----------------------------------------------------
-# ATENÇÃO: Verifique e ajuste este caminho.
-CAMINHO_PASTA = r"C:\Users\GabrielAquino\Downloads\cda_fi_202504"
+# Obtém o caminho do diretório onde este script (app.py) está a ser executado
+diretorio_base = os.path.dirname(os.path.abspath(__file__))
+# Aponta para a subpasta 'dados'
+CAMINHO_PASTA = os.path.join(diretorio_base, 'dados')
+
 PREFIXO = 'cda_fi_BLC'
 COLUNA_FILTRO = 'DENOM_SOCIAL' 
 
@@ -244,4 +247,5 @@ if __name__ == '__main__':
         print("=======================================================")
         app.run(debug=True)
     except Exception as e:
+
         print(f"\nFATAL: Não foi possível iniciar a aplicação. Erro: {e}")
